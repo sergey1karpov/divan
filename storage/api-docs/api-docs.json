@@ -1,0 +1,430 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "User wallet API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/v1/bank/change-currency-course": {
+            "post": {
+                "tags": [
+                    "Bank"
+                ],
+                "summary": "Изменить курс",
+                "description": "Изменить курс",
+                "operationId": "ChangeCourse",
+                "parameters": [
+                    {
+                        "name": "currency",
+                        "in": "query",
+                        "description": "Валюта (euro, usd)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "course",
+                        "in": "query",
+                        "description": "Курс к рублю",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/bank/drop-currency": {
+            "post": {
+                "tags": [
+                    "Bank"
+                ],
+                "summary": "Отключить валюту, конвертировать в другую",
+                "description": "Отключить валюту, конвертировать в другую",
+                "operationId": "ChangeCourseAndDrop",
+                "parameters": [
+                    {
+                        "name": "drop_currency",
+                        "in": "query",
+                        "description": "Валюта (euro, usd) которую отключаем",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "new_currency",
+                        "in": "query",
+                        "description": "Валюта (euro, usd) в которую конвертируем",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/get-balance": {
+            "get": {
+                "tags": [
+                    "UserWallet"
+                ],
+                "summary": "Получение суммы всех кошельков",
+                "description": "Получение суммы всех кошельков",
+                "operationId": "UserWallet",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "id юзера",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "currency",
+                        "in": "query",
+                        "description": "В какой валюте (usd, euro, rub или валюта по умолчанию)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/create-wallet": {
+            "post": {
+                "tags": [
+                    "UserWallet"
+                ],
+                "summary": "Создание нового счета",
+                "description": "Создание нового кошелька",
+                "operationId": "UserWalletCreate",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "id юзера",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "default_currency",
+                        "in": "query",
+                        "description": "Валюта кошелька(usd, euro, rub)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/create-currency-wallet": {
+            "post": {
+                "tags": [
+                    "UserWallet"
+                ],
+                "summary": "Создание кошелька под валюту",
+                "description": "Создание кошелька под валюту",
+                "operationId": "UserWalletCurrencyCreate",
+                "parameters": [
+                    {
+                        "name": "wallet_id",
+                        "in": "query",
+                        "description": "id счета",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "currency",
+                        "in": "query",
+                        "description": "Валюта кошелька(usd, euro, rub)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/add-money": {
+            "post": {
+                "tags": [
+                    "UserWallet"
+                ],
+                "summary": "Пополнение кошелька",
+                "description": "Пополнение кошелька",
+                "operationId": "AddMoney",
+                "parameters": [
+                    {
+                        "name": "wallet_id",
+                        "in": "query",
+                        "description": "id счета",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "currency",
+                        "in": "query",
+                        "description": "Валюта кошелька(usd, euro, rub)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sum",
+                        "in": "query",
+                        "description": "Сумма пополнения",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/write-off-money": {
+            "post": {
+                "tags": [
+                    "UserWallet"
+                ],
+                "summary": "Списать с кошелька",
+                "description": "Списать с кошелька",
+                "operationId": "WriteOffMoney",
+                "parameters": [
+                    {
+                        "name": "wallet_id",
+                        "in": "query",
+                        "description": "id счета",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "currency",
+                        "in": "query",
+                        "description": "Валюта кошелька(usd, euro, rub)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sum",
+                        "in": "query",
+                        "description": "Сумма списания",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/change-currency": {
+            "post": {
+                "tags": [
+                    "UserWallet"
+                ],
+                "summary": "Изменить валюту кошелька",
+                "description": "Изменить валюту кошелька",
+                "operationId": "ChangeCcurrency",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "id юзера",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "currency",
+                        "in": "query",
+                        "description": "Валюта кошелька(usd, euro, rub)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/get-currencies": {
+            "get": {
+                "tags": [
+                    "UserWallet"
+                ],
+                "summary": "Получить все поддерживаемые валюты",
+                "description": "Получить все поддерживаемые валюты",
+                "operationId": "GetCurrencies",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

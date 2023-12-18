@@ -1,0 +1,83 @@
+version: '3'
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    image: digitalocean.com/php
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      postgres:
+        ipv4_address: 172.20.128.2
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - postgres
+
+  #PostgreSQL
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  #PGAdmin
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    volumes:
+      - pgadmin:/root/.pgadmin
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    networks:
+      - postgres
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+#Docker Networks
+networks:
+  postgres:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  postgres:
+  pgadmin:
